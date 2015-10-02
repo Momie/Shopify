@@ -1,0 +1,41 @@
+%html
+  %head
+    %meta{:content=>'text/html; charset=UTF-8', :'http-equiv'=>'Content-Type'}
+    = render "style"
+  %body  
+    %div{:style => "background-color:#dfdfdf;padding:50px;margin:0 auto;width:100%"}
+      %table
+        %tr
+          %td
+            = image_tag "https://cdn.shopify.com/s/assets/admin/shopify-notification-icon-51e4364c8d8e84ad3a6eaca38e06d95e.png"
+          %td
+            %h1{:style=>"font-family: 'Corben', cursive;font-size:2em;margin:0;"}
+              =@shop
+              Shop
+            %h6{:style=>"font-family:'Cookie', cursive;font-size:18px;margin:0;"}
+              = @customer_name
+              recommends you the product
+              = @product_name          
+      %div{:style=>"background-color: #fff;border-radius: 5px;padding: 8px;width: 800px;min-height: 200px;"}
+        %div{:style=>"width: 800px;min-height: 200px;overflow:  scroll;"}
+          %table{:border => "0", :cellpadding => "0", :cellspacing => "0" ,:width=>"100%"}
+            %tbody
+              %tr
+                %td{:colspan => "3"}
+                  %table{:border => "0", :cellpadding => "0", :cellspacing => "0", :style => "font-family:Helvetica,Arial,sans-serif",}
+                    %tbody
+                      %tr
+                        %td{:style=>"vertical-align:top;"}
+                          %a{:href=>@product_url}
+                            = image_tag @product_img ,:style=>"border-radius: 5px;margin:10px;"
+                        %td{:style=>"vertical-align:top;"}
+                          = @product_discreption.html_safe
+                          %h1
+                            = @product_price
+        %div{:style=>"font-family: 'Homenaje', sans-serif;font-size:20px;"}
+          = @customer_name 
+          %p
+            = @comment
+        %a{:href=>@product_url}
+          =@product_url
+  //= @letre.html_safe

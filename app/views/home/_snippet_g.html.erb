@@ -1,0 +1,54 @@
+{% if customer  %}
+{% capture permalinkURL_ %}{{ shop.url }}{{ product.url }}{% endcapture %}
+{% assign valide_customer = false %}
+{% for _order_ in customer.orders %}
+{% if valide_customer == false and _order_.financial_status == &quot;paid&quot; %}
+    {% assign valide_customer = true %}
+{% endif %}
+{% endfor %}
+{% if valide_customer %}
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//app.mhalheli.info/style.css?store={{product.id}}&quot;&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;http://app.mhalheli.info/script.js?store={{product.id}}&quot;&gt;&lt;/script&gt;
+&lt;a href=&quot;#RecommendeModal&quot; data-toggle=&quot;modal&quot; role=&quot;button&quot; class=&quot;_btn_&quot;&gt;
+   &lt;i class=&quot;fa fa-bullhorn fa-2&quot;&gt;&lt;/i&gt;
+&lt;/a&gt;
+ 
+&lt;!-- Modal --&gt;
+&lt;div id=&quot;RecommendeModal&quot; class=&quot;modal hide fade&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;ModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;div class=&quot;modal-header&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;×&lt;/button&gt;
+    &lt;h3 id=&quot;ModalLabel&quot;&gt;
+    &lt;i class=&quot;fa fa-bullhorn fa-1&quot;&gt;&lt;/i&gt;&lt;/xmp&gt;
+    &lt;span data-bind=&quot;text: windwoTitle&quot;&gt;&lt;/span&gt;&lt;xmp&gt;
+  &lt;/h3&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;modal-body&quot;&gt;
+    &lt;div id=&quot;formular_recommend&quot;&gt;
+      &lt;div id=&quot;sendme_load&quot;&gt;
+      &lt;/div&gt;
+      &lt;!-- Alert --&gt;
+      &lt;div id=&quot;recommend_alert&quot;&gt;&lt;/div&gt;
+      &lt;!-- Form --&gt;
+      &lt;form action=&quot;#&quot; id=&quot;sendme_form&quot;&gt;
+         &lt;div class=&quot;form_recommend&quot;&gt;
+           &lt;input type=&quot;text&quot; name=&quot;mail&quot; placeholder=&quot;Mail&quot; /&gt;
+         &lt;/div&gt;
+         &lt;div class=&quot;form_recommend&quot;&gt;
+          &lt;textarea name=&quot;comment&quot; placeholder=&quot;description&quot;&gt;&lt;/textarea&gt;
+         &lt;/div&gt;
+           &lt;input type=&quot;hidden&quot; name=&quot;url&quot; value=&quot;{{permalinkURL_}}&quot; /&gt;
+           &lt;input type=&quot;hidden&quot; name=&quot;product_id&quot;  value=&quot;{{product.id}}&quot; /&gt;
+           &lt;input type=&quot;hidden&quot; name=&quot;customer_id&quot; value=&quot;{{customer.id}}&quot; /&gt;
+           &lt;input type=&quot;hidden&quot; name=&quot;shop_domain&quot; value=&quot;{{shop.domain}}&quot; /&gt;
+       &lt;/form&gt;
+      &lt;!-- End Form --&gt;
+    &lt;/div&gt;
+      &lt;/div&gt;
+  &lt;div class=&quot;modal-footer&quot;&gt;
+    &lt;button class=&quot;_btn_&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;Close&lt;/button&gt;
+    &lt;button class=&quot;_btn_ _btn_-primary&quot; onclick=&quot;sendme_app_sender()&quot;&gt;Send&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+{% endif %}
+{% endif %}

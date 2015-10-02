@@ -1,0 +1,53 @@
+
+
+{% if customer  %}
+{% capture permalinkURL_ %}{{ shop.url }}{{ product.url }}{% endcapture %}
+{% assign valide_customer = false %}
+{% for _order_ in customer.orders %}
+{% if valide_customer == false and _order_.financial_status == 'paid' %}
+    {% assign valide_customer = true %}
+{% endif %}
+{% endfor %}
+{% if valide_customer %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://192.168.137.4:3000/style.css?store={{product.id}}">
+<script type="text/javascript" src="https://192.168.137.4:3000/script.js?store={{product.id}}"></script>
+
+<a href="#myModal" role="button" data-toggle="modal">
+  <i class="fa fa-bullhorn fa-3"></i>
+</a>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Recommende Me</h3>
+  </div>
+  <div class="modal-body">
+    <div id="formular_recommend">
+       <form action="#" id="sendme_form">
+         <div class="form_recommend">
+           <input type="text" placeholder="Mail" />
+         </div>
+         <div class="form_recommend">
+           <textarea placeholder="description"></textarea>
+         </div>
+           <input type="hidden" name="url" value="{{permalinkURL_}}" />
+           <input type="hidden" name="product_id"  value="{{product.id}}" />
+           <input type="hidden" name="customer_id" value="{{customer.id}}" />
+       </form>
+    </div>
+      </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" onclick="sendme_app_sender()">Send</button>
+  </div>
+</div>
+
+{% endif %}
+
+{% endif %}
+
+
+
+

@@ -1,0 +1,187 @@
+%ul.breadcrumb
+  %li.active
+    Snippet
+    %span.divider|
+  %li
+    %a{:href=>recommendation_path}
+      Recomendation
+      %span.badge.badge-info
+        = @nb_recomendation 
+      %span.divider|
+  %li
+    %a{:href=>customers_path}
+      Customers
+      %span.badge.badge-warning
+        = @nb_customers
+.row
+  .span6
+    .section-cell
+      %h6
+        Window Setting
+      .controls.row-fluid
+        .span6
+          %h6
+            Title
+          %input.span12{:'data-bind'=>"value: windwoTitle",:type=>"text", :placeholder=>"Title"}
+        .span6
+          %h6
+            Width/Hight
+          %input.span5{:'data-bind'=>"value: winWidth",:type=>"text", :placeholder=>"Width"}:
+          %input.span5{:'data-bind'=>"value: winHight",:type=>"text", :placeholder=>"Hight"}
+      .controls.row-fluid
+        .span6
+          %h6
+            Commentair Hight
+          %input.span6{:'data-bind'=>"value: nbrCharacter",:type=>"text", :placeholder=>"5"}
+        .span6
+          %h6
+            Color
+          %div{:style=>"width:128px;"}
+            %input#wind_color.colorPicker.span12.evo-cp0{:type=>"text",:style=>"width:100px;",:'data-bind'=>"text: windColor"}
+      %h6
+        Snippet Boutton
+      .controls.row-fluid
+        .span6
+          %h6
+            Type
+          %input{:type=>"checkbox", :placeholder=>"Title",:'data-bind'=>"checked: bouttonStatus"}
+            Type is Boutton
+        .span6
+          %h6
+            Color
+          %div{:style=>"width:128px;"}
+            %input#mycolor.colorPicker.span12.evo-cp0{:type=>"text",:style=>"width:100px;",:'data-bind'=>"text: buttonColor"}
+      .controls.row-fluid
+        .span6
+          %h6
+            Text
+          %input.span12{:'data-bind'=>"value: boutonText",:type=>"text", :placeholder=>"Title"}
+        .span6
+          %h6
+            size
+          %select.span6{:'data-bind'=>"options: avalableSize, value: buttonSize"}
+          %button.btn#btn_generate
+            %i.fa.fa-magic
+            Generate
+  .span6
+    .viewer
+      %h6
+        Window view
+      = render "setting"
+      %h6
+        Icon view
+      %a#icon_view.btn{:href=>"#",:role=>"button", :'data-bind'=>"css: bouttonStatus_css"}
+        %i.fa.fa-bullhorn{:'data-bind'=>"css: bouttonSizecss"}
+        %span{:'data-bind'=>"text :boutonText,style:{visibility: bouttonStatus() != true ? 'hidden' : 'visible' }"}
+    .cadre_generator
+      %p
+        Code be inserted in product.liquide
+      .cadre_code_snippet
+        %xmp
+          {% include 'SendMe' %}
+      %p
+        This code will be inserted in file named SendMe.liquid in snippets folder create it if not exist
+      %textarea#snippet_code{:rows=>15,:style=>"width:95%;",:'data-bind'=>"html: generated_code"}
+:javascript
+    $("#btn_generate").click(function(){
+      //$("#snippet_code").html(html_)
+      $(".viewer").hide();
+      $(".cadre_generator").show();
+    });
+    $(document).ready(function() {
+        $(".cadre_generator").hide();
+        $("#mycolor").colorpicker({hideButton: true});
+        $("#mycolor").on("change.color", function(event, color){
+        $('#icon_view').css('color', color);
+        });
+        $("#wind_color").colorpicker({hideButton: true});
+        $("#wind_color").on("change.color", function(event, color){
+        $('.modal-header').css('background-color', color);
+        });
+    });
+  function ShopifyModel() {
+      var self = this;
+      this.windwoTitle = ko.observable("Recommende Me");
+      this.boutonText = ko.observable("Recommende Me");
+      this.winWidth = ko.observable('450px');
+      this.winHight = ko.observable('160px');
+      this.nbrCharacter = ko.observable(4);
+      this.bouttonStatus = ko.observable(true);
+      self.avalableSize = ko.observableArray(['1','2','3','4']);
+      this.buttonSize = ko.observable(1);
+      this.buttonColor = ko.computed(function() {
+        return $("#mycolor").val();
+       }, this);
+      this.windColor = ko.computed(function() {
+        return $("#wind_color").val();
+       }, this);
+      this.bouttonStatus_css =  ko.computed(function() {
+        return this.bouttonStatus() == true ? "btn" : "";
+      }, this);
+       this.bouttonSizecss = ko.computed(function() {
+        return "fa-" + this.buttonSize();
+       }, this);
+
+
+       this.generated_code =  ko.computed(function() {
+        btn_text = this.bouttonStatus() ? this.boutonText() : '' ;
+        btn_class =  this.bouttonStatus() ? '_btn_' : '' ; 
+        var html_ =  "{% if customer  %}  \n \
+          {% capture permalinkURL_ %}{{ shop.url }}{{ product.url }}{% endcapture %} \r \n \
+          {% assign valide_customer = false %}  \r \n \
+          {% for _order_ in customer.orders %}  \r \n \
+          {% if valide_customer == false and _order_.financial_status == &quot;paid&quot; %}  \r \n \
+          {% assign valide_customer = true %}  \n \n \
+          {% endif %} \n \
+          {% endfor %} \n \
+          {% if valide_customer %} \n \
+          &lt;link rel=&quot;stylesheet&quot; href=&quot;//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css&quot;&gt; \n \
+          &lt;link rel=&quot;stylesheet&quot; href=&quot;//app.mhalheli.info/style.css?store={{product.id}}&quot;&gt; \n \
+          &lt;script type=&quot;text/javascript&quot; src=&quot;http://app.mhalheli.info/script.js?store={{product.id}}&quot;&gt;&lt;/script&gt; \n \
+          &lt;a href=&quot;#RecommendeModal&quot; data-toggle=&quot;modal&quot; role=&quot;button&quot; style=&quot;color:" + this.buttonColor() + "&quot; class=&quot;" + btn_class + "&quot;&gt; \n \
+          &lt;i class=&quot;fa fa-bullhorn "+ this.bouttonSizecss() +"&quot;&gt;&lt;/i&gt; " + btn_text  + "  \n \
+          &lt;/a&gt; \n \
+          &lt;!-- Modal --&gt; \n \
+          &lt;div id=&quot;RecommendeModal&quot; class=&quot;modal hide fade&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;ModalLabel&quot; aria-hidden=&quot;true&quot;  style=&quot;width:" + this.winWidth() + "; background-color:" + this.windColor() + ";&quot; &gt; \n \
+            &lt;div class=&quot;modal-header&quot;&gt; \n \
+              &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;×&lt;/button&gt; \n \
+              &lt;h3 id=&quot;ModalLabel&quot;&gt; \n \
+              &lt;i class=&quot;fa fa-bullhorn fa-1&quot;&gt;&lt;/i&gt;&lt; " + this.windwoTitle() + " \n \
+            &lt;/h3&gt; \n \
+            &lt;/div&gt; \n \
+            &lt;div class=&quot;modal-body&quot;&gt; \n \
+              &lt;div id=&quot;formular_recommend&quot;&gt; \n \
+                &lt;div id=&quot;sendme_load&quot;&gt; \n \
+                &lt;/div&gt; \n \
+                &lt;!-- Alert --&gt; \n \
+                &lt;div id=&quot;recommend_alert&quot;&gt;&lt;/div&gt; \n \
+                &lt;!-- Form --&gt; \n \
+                &lt;form action=&quot;#&quot; id=&quot;sendme_form&quot;&gt; \n \
+                   &lt;div class=&quot;form_recommend&quot;&gt; \n \
+                     &lt;input type=&quot;text&quot; name=&quot;mail&quot; placeholder=&quot;Mail&quot; /&gt; \n \
+                   &lt;/div&gt; \n \
+                   &lt;div class=&quot;form_recommend&quot;&gt; \n \
+                    &lt;textarea rows=&quot;" + this.nbrCharacter() + "&quot; name=&quot;comment&quot; placeholder=&quot;description&quot;&gt;&lt;/textarea&gt; \n \
+                   &lt;/div&gt; \n \
+                     &lt;input type=&quot;hidden&quot; name=&quot;url&quot; value=&quot;{{permalinkURL_}}&quot; /&gt; \n \
+                     &lt;input type=&quot;hidden&quot; name=&quot;product_id&quot;  value=&quot;{{product.id}}&quot; /&gt; \n \
+                     &lt;input type=&quot;hidden&quot; name=&quot;customer_id&quot; value=&quot;{{customer.id}}&quot; /&gt; \n \
+                     &lt;input type=&quot;hidden&quot; name=&quot;shop_domain&quot; value=&quot;{{shop.domain}}&quot; /&gt; \n \
+                 &lt;/form&gt; \n \
+                &lt;!-- End Form --&gt; \n \
+              &lt;/div&gt; \n \
+                &lt;/div&gt; \n \
+            &lt;div class=&quot;modal-footer&quot;&gt; \n \
+              &lt;button class=&quot;_btn_&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;Close&lt;/button&gt; \n \
+              &lt;button class=&quot;_btn_ _btn_-primary&quot; onclick=&quot;sendme_app_sender()&quot;&gt;Send&lt;/button&gt; \n \
+            &lt;/div&gt; \n \
+          &lt;/div&gt; \n \
+          {% endif %} \n \
+          {% endif %} "; 
+          return html_;
+      }, this);
+
+  } 
+  ko.applyBindings(new ShopifyModel());
+
+                           

@@ -1,0 +1,62 @@
+%ul.breadcrumb
+  %li
+    %a{:href=>snippet_path}
+      Snippet
+      %span.divider|
+  %li
+    %a{:href=>recommendation_path}
+      Recomendation
+      %span.badge.badge-info
+        = @nb_recomendation 
+      %span.divider|
+  %li.active
+    Customers
+    %span.badge.badge-warning
+      = @nb_customers
+.row
+  .section-cell
+    %h4
+      Customers List
+    %table#example1.table.display{:cellspacing=>"0",:width=>"100%"}
+      %thead
+        %tr
+          %th
+            Customer
+          %th
+            mail
+          %th
+            Recommendation
+          %th
+            Date
+      %tfoot
+        %tr
+          %th
+            Customer
+          %th
+            mail
+          %th
+            Recommendation
+          %th
+            Detail
+      %tbody
+        - @customers.each do |r|
+          %tr
+            %td= r.last_name + " " + r.first_name
+            %td= r.email
+            %td= @commendations[r.id].size rescue 0
+            %td.noClick
+              %a{:href=>customer_path(r.id)}
+                %i.fa.fa-search-plus
+                detail
+            /= r.created_at.to_date
+:javascript
+  $(document).ready(function() {
+    $('#example1').DataTable( {
+        "initComplete": function () {
+            var api = this.api();
+            api.$('td').not('.noClick').click( function () {
+                api.search( this.innerHTML ).draw();
+            } );
+        }
+    } );
+  } );

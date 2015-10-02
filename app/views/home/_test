@@ -1,0 +1,54 @@
+{% if customer  %}
+{% capture permalinkURL_ %}{{ shop.url }}{{ product.url }}{% endcapture %}
+{% assign valide_customer = false %}
+{% for _order_ in customer.orders %}
+{% if valide_customer == false and _order_.financial_status == "paid" %}
+    {% assign valide_customer = true %}
+{% endif %}
+{% endfor %}
+{% if valide_customer %}
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//app.mhalheli.info/style.css?store={{product.id}}">
+<script type="text/javascript" src="http://app.mhalheli.info/script.js?store={{product.id}}"></script>
+<a href="#RecommendeModal" data-toggle="modal" role="button" class="_btn_">
+   <i class="fa fa-bullhorn fa-2"></i>
+</a>
+ 
+<!-- Modal -->
+<div id="RecommendeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="ModalLabel">
+    <i class="fa fa-bullhorn fa-1"></i></xmp>
+    <span data-bind="text: windwoTitle"></span><xmp>
+  </h3>
+  </div>
+  <div class="modal-body">
+    <div id="formular_recommend">
+      <div id="sendme_load">
+      </div>
+      <!-- Alert -->
+      <div id="recommend_alert"></div>
+      <!-- Form -->
+      <form action="#" id="sendme_form">
+         <div class="form_recommend">
+           <input type="text" name="mail" placeholder="Mail" />
+         </div>
+         <div class="form_recommend">
+          <textarea name="comment" placeholder="description"></textarea>
+         </div>
+           <input type="hidden" name="url" value="{{permalinkURL_}}" />
+           <input type="hidden" name="product_id"  value="{{product.id}}" />
+           <input type="hidden" name="customer_id" value="{{customer.id}}" />
+           <input type="hidden" name="shop_domain" value="{{shop.domain}}" />
+       </form>
+      <!-- End Form -->
+    </div>
+      </div>
+  <div class="modal-footer">
+    <button class="_btn_" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="_btn_ _btn_-primary" onclick="sendme_app_sender()">Send</button>
+  </div>
+</div>
+{% endif %}
+{% endif %}

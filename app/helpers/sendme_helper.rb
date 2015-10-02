@@ -1,0 +1,2 @@
+module SendmeHelper
+end

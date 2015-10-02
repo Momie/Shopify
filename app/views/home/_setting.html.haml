@@ -1,0 +1,15 @@
+.modal{:'data-bind'=>"style: { 'width': winWidth}",:style=>"position: relative; top: auto; left: auto; right: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;"}
+  .modal-header
+    %button.close{ :type=>"button",:'data-dismiss'=>"modal" ,:'aria-hidden'=>"true"}
+      ×
+    %h3{:'data-bind'=>"text: windwoTitle"}
+  .modal-body{:'data-bind'=>"style: {'height': winHight }"}
+    .form_recommend
+      %input{:style=>"width:100%;",:type=>"text",:placeholder=>"Mail"}
+    .form_recommend
+      %textarea{:'data-bind'=>"attr: {rows : nbrCharacter}",:style=>"width:100%;",:placeholder=>"description"}
+  .modal-footer
+    %a.btn{:href=>"#"}
+      Close
+    %a.btn.btn-primary{:href=>"#"}
+      Send
